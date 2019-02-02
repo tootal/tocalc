@@ -11,6 +11,7 @@ void toCalcMain(){
 		printf("%s",SHOWOUTPUT);
 		bool flag=true;
 		if(input[0]=='h'){
+			printf("显示帮助：\n");
 			showHelp();
 		}else if(input[0]=='q'){
 			printf("Bye\n");
@@ -64,7 +65,7 @@ void showInfo(){
 }
 
 void showHelp(){
-	printf("toCalc支持高精度实数算术运算，支持加减乘除运算。\n");
+	printf("toCalc支持两个高精度实数算术运算，支持加减乘除运算。\n");
 	printf("直接输入算式即可，支持的符号包括数字0-9，+-*/\n");
 	printf("输入\"h\"查看帮助，\"q\"退出程序，输入小数点加数字可设置保留小数位数\n");
 	printf("例如：输入\".7\"设置为保留到小数点后7位。\n");

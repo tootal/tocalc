@@ -1,7 +1,7 @@
 #ifndef _TOMATH_H
 #define _TOMATH_H
 
-static const char *VERSION="1.0.0";
+static const char *VERSION="1.1.1";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";

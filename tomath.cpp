@@ -39,33 +39,21 @@ char* toCalc(char *input){
 	return output;
 }
 
-bool isSym(char x){
-	if(isNum(x)||\
-		 x=='+'||\
-		 x=='-'||\
-		 x=='*'||\
-		 x=='/'||\
-		 x=='.'||\
-		 x==' '\
-	)return true;
-	return false;
+bool checkSym(char *str){
+	if(strspn(str,ACCEPTCHAR)==strlen(str))return true;
+	else return false;
 }
 
-bool checkSym(char *input){
-	int len=strlen(input);
+bool checkInput(char *str){
 	bool flag=true;
-	for(int i=0;i<len;i++){
-		if(!isSym(input[i])){
-			flag=false;
-			break;
-		}
-	}
-	return flag;
-}
-
-bool checkInput(char *input){
-	bool flag=true;
-	flag=flag&&checkSym(input);
+	flag=flag&&checkSym(str);
+	char *pos=str;
+	if(*pos=='+'||*pos=='-')pos=pos+1;
+	pos=pos+strcspn(pos,ACCEPTOPERATOR);
+	flag=flag&&checkIt(pos+1);
+	char ch=*pos;*pos=0;
+	flag=flag&&checkIt(str);
+	*pos=ch;
 	return flag;
 }
 
@@ -83,20 +71,20 @@ void showHelp(){
 	printf("\n作者：tootal\n邮箱：tootal@yeah.net\n");
 }
 
-int setPrecision(char *input){
-	int temp=str2int(input);
+int setPrecision(char *str){
+	int temp=str2int(str);
 	if(temp==-1)return -1;
 	else return PRECISION=temp;
 }
 
-int str2int(char *left,char *right){
-	int len,ans=0;
-	if(right==nullptr)len=strlen(left);
-	else len=right-left;
+int str2int(char *str){
+	int len=strlen(str),ans=0;
 	// printf("len=%d\n",len);
-	if(len>8||!checkNum(left,right))return -1;
+	if(len>8||!checkNum(str)){
+		return -1;
+	}
 	for(int i=0;i<len;i++){
-		ans=ans*10+left[i]-'0';
+		ans=ans*10+str[i]-'0';
 	}
 	return ans;
 }
@@ -106,16 +94,29 @@ bool isNum(char x){
 	return false;
 }
 
-bool checkNum(char *left,char *right){
-	int len;
-	if(right==nullptr)len=strlen(left);
-	else len=right-left;
+bool checkNum(char *str){
+	int len=strlen(str);
 	bool flag=true;
 	for(int i=0;i<len;i++){
-		if(!isNum(left[i])){
+		if(!isNum(str[i])){
 			flag=false;
 			break;
 		}
+	}
+	return flag;
+}
+
+bool checkIt(char *str){
+	if(*str=='+'||*str=='-')str=str+1;
+	char *pos=strchr(str,'.');
+	bool flag=true;
+	if(pos==0){
+		flag=checkNum(str);
+	}else{
+		flag=flag&&checkNum(pos+1);
+		char ch=*pos;*pos=0;
+		flag=flag&&checkNum(str);
+		*pos=ch;
 	}
 	return flag;
 }

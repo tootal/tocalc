@@ -8,6 +8,11 @@ static const char *SHOWINPUT="toCalc>>> ";
 static const char *SHOWOUTPUT="toCalc<<< ";
 //界面交互提示符
 
+static const char *ACCEPTNUMBER="0123456789";
+static const char *ACCEPTOPERATOR="+-*/";
+static const char *ACCEPTCHAR="0123456789+-*/. ";
+//允许输入的字符
+
 static const int MAXLEN=100000;
 //输入输出最大长度
 
@@ -24,16 +29,10 @@ void toCalcMain();
 char* toCalc(char *input);
 //计算部分
 
-bool isSym(char x);
-//判断允许的输入字符
-
-bool checkSym(char *input);
+bool checkSym(char *str);
 //检查输入符号
 
-bool checkBra(char *input);
-//检查括号是否匹配
-
-bool checkInput(char *input);
+bool checkInput(char *str);
 //检查输入是否为算式
 
 void showInfo();
@@ -42,17 +41,20 @@ void showInfo();
 void showHelp();
 //显示帮助
 
-int setPrecision(char *input);
+int setPrecision(char *str);
 //设置保留小数位数,返回-1表示设置失败
 
-int str2int(char *left,char *right=nullptr);
+int str2int(char *str);
 //把区间[left,right)范围内的字符串转换成正整数
 //返回-1表示转换失败,含有其他字符
 
 bool isNum(char x);
 //判断字符是否为数字
 
-bool checkNum(char *left,char *right=nullptr);
-//判断区间[left,right)范围内的字符串是否全为数字
+bool checkNum(char *str);
+//判断字符串是否全为数字
+
+bool checkIt(char *str);
+//判断字符串是否为实数
 
 #endif

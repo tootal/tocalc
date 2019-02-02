@@ -12,13 +12,14 @@ g++ -static -o tocalc tocalc.cpp tomath.cpp & tocalc
 #include <cstdlib>
 #include "tomath.h"
 int main(){
-	//文件采用UTF-8格式编码
+	//文件统一采用UTF-8格式编码
 	//Windows 系统下调节命令行窗口编码避免中文乱码
 	system("chcp 65001 > nul");
 
 	// printf("hello world!\n");
 	// printf("你好你好！\n");getchar();
 	toCalcMain();
+
 
 	return 0;
 }

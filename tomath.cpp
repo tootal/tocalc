@@ -17,13 +17,34 @@ void toCalcMain(){
 			printf("Bye\n");
 			break;
 		}else if(input[0]=='.'){
-			int num=setPrecision(input+1);
-			if(num==-1)flag=false;
+			int len=strlen(input+1);
+			if(len>6||!checkNum(input+1))flag=false;
 			else{
+				int num=setPrecision(input+1);
 				printf("已设置结果保留%d位小数！\n",num);
 			}
 		}else if(checkInput(input)){
-			printf("输入合法！\n");
+			// printf("输入合法！\n");
+			char *pos=findOperator(input);
+			toNum *a=str2toNum(pos+1);
+			char op=*pos;*pos=0;
+			toNum *b=str2toNum(input);
+			toNum *c;
+			if(op=='+'){
+				c=add(b,a);
+			}else if(op=='-'){
+				c=sub(b,a);
+			}else if(op=='*'){
+				c=mul(b,a);
+			}else if(op=='/'){
+				if(b->len==1&&b->a[0]==0)flag=false;
+				else{
+					c=div(b,a);
+				}
+			}
+			if(flag){
+				printf("%s\n",toNum2str(c));
+			}
 		}else{
 			flag=false;
 		}
@@ -34,23 +55,21 @@ void toCalcMain(){
 	}
 }
 
-char* toCalc(char *input){
-	char *output;
-
-	return output;
-}
-
 bool checkSym(char *str){
 	if(strspn(str,ACCEPTCHAR)==strlen(str))return true;
 	else return false;
 }
 
+char* findOperator(char *str){
+	if(*str=='+'||*str=='-')str=str+1;
+	return str+strcspn(str,ACCEPTOPERATOR);
+}
+
 bool checkInput(char *str){
 	bool flag=true;
 	flag=flag&&checkSym(str);
-	char *pos=str;
-	if(*pos=='+'||*pos=='-')pos=pos+1;
-	pos=pos+strcspn(pos,ACCEPTOPERATOR);
+
+	char *pos=findOperator(str);
 	flag=flag&&checkIt(pos+1);
 	char ch=*pos;*pos=0;
 	flag=flag&&checkIt(str);
@@ -73,9 +92,7 @@ void showHelp(){
 }
 
 int setPrecision(char *str){
-	int temp=str2int(str);
-	if(temp==-1)return -1;
-	else return PRECISION=temp;
+	return PRECISION=str2int(str);
 }
 
 int str2int(char *str){
@@ -120,4 +137,48 @@ bool checkIt(char *str){
 		*pos=ch;
 	}
 	return flag;
+}
+
+toNum* str2toNum(char *str){
+	toNum *a=new toNum;
+	a->sign=false;
+	if(str[0]=='-')a->sign=true;
+	if(str[0]=='+'||str[0]=='-')str=str+1;
+	int len=strlen(str);
+	char *tempstr=new char[len];
+	int i,j=0,pos=len;
+	for(i=0;i<len;i++){
+		if(isNum(str[i]))tempstr[j++]=str[i];
+		else pos=i;
+	}
+	a->exp=pos-len;
+	// printf("exp=%d\n",a->exp);
+	len=j;j=0;
+	a->a=new int[(len-1)/WIDTH+1];
+	for(i=len-WIDTH;i>=0;i-=WIDTH){
+		a->a[j++]=str2int(tempstr+i);
+		tempstr[i]=0;
+	}
+	if(i!=-WIDTH)a->a[j++]=str2int(tempstr);
+	a->len=j;
+}
+
+toNum* add(toNum *x,toNum *y){
+
+}
+
+toNum* sub(toNum *x,toNum *y){
+
+}
+
+toNum* mul(toNum *x,toNum *y){
+
+}
+
+toNum* div(toNum *x,toNum *y){
+
+}
+
+char* toNum2str(toNum *x){
+	
 }

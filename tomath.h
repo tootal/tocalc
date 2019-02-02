@@ -24,6 +24,15 @@ void toCalcMain();
 char* toCalc(char *input);
 //计算部分
 
+bool isSym(char x);
+//判断允许的输入字符
+
+bool checkSym(char *input);
+//检查输入符号
+
+bool checkBra(char *input);
+//检查括号是否匹配
+
 bool checkInput(char *input);
 //检查输入是否为算式
 
@@ -44,6 +53,6 @@ bool isNum(char x);
 //判断字符是否为数字
 
 bool checkNum(char *left,char *right=nullptr);
-//判断区间[left,right)范围内的字符串是否为数字
+//判断区间[left,right)范围内的字符串是否全为数字
 
 #endif

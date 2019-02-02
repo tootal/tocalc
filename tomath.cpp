@@ -39,8 +39,34 @@ char* toCalc(char *input){
 	return output;
 }
 
+bool isSym(char x){
+	if(isNum(x)||\
+		 x=='+'||\
+		 x=='-'||\
+		 x=='*'||\
+		 x=='/'||\
+		 x=='.'||\
+		 x==' '\
+	)return true;
+	return false;
+}
+
+bool checkSym(char *input){
+	int len=strlen(input);
+	bool flag=true;
+	for(int i=0;i<len;i++){
+		if(!isSym(input[i])){
+			flag=false;
+			break;
+		}
+	}
+	return flag;
+}
+
 bool checkInput(char *input){
-	return true;
+	bool flag=true;
+	flag=flag&&checkSym(input);
+	return flag;
 }
 
 void showInfo(){
@@ -48,9 +74,10 @@ void showInfo(){
 	printf("输入h查看帮助，q退出程序\n");
 	printf("请输入算式，按回车键结束输入。\n\n");
 }
+
 void showHelp(){
-	printf("toCalc支持高精度实数算术运算，支持加减乘除幂运算。\n");
-	printf("直接输入算式即可，支持的符号包括数字0-9，+-*/^，()\n");
+	printf("toCalc支持高精度实数算术运算，支持加减乘除运算。\n");
+	printf("直接输入算式即可，支持的符号包括数字0-9，+-*/\n");
 	printf("输入\"h\"查看帮助，\"q\"退出程序，输入小数点加数字可设置保留小数位数\n");
 	printf("例如：输入\".7\"设置为保留到小数点后7位。\n");
 	printf("\n作者：tootal\n邮箱：tootal@yeah.net\n");
@@ -67,9 +94,9 @@ int str2int(char *left,char *right){
 	if(right==nullptr)len=strlen(left);
 	else len=right-left;
 	// printf("len=%d\n",len);
-	if(len>6||!checkNum(left,right))return -1;
+	if(len>8||!checkNum(left,right))return -1;
 	for(int i=0;i<len;i++){
-		ans=ans*10+(*(left+i))-'0';
+		ans=ans*10+left[i]-'0';
 	}
 	return ans;
 }
@@ -85,7 +112,7 @@ bool checkNum(char *left,char *right){
 	else len=right-left;
 	bool flag=true;
 	for(int i=0;i<len;i++){
-		if(!isNum(*(left+i))){
+		if(!isNum(left[i])){
 			flag=false;
 			break;
 		}

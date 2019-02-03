@@ -20,6 +20,6 @@ int main(){
 	// printf("你好你好！\n");getchar();
 	toCalcMain();
 
-
+	
 	return 0;
 }

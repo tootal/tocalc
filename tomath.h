@@ -1,7 +1,7 @@
 #ifndef _TOMATH_H
 #define _TOMATH_H
 
-static const char *VERSION="1.1.1";
+static const char *VERSION="1.2.4";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -16,8 +16,8 @@ static const char *ACCEPTCHAR="0123456789+-*/. ";
 static const int MAXLEN=100000;
 //输入输出最大长度
 
-static const int WIDTH=5;
-static const int BASE=100000;
+static const int WIDTH=2;
+static const int BASE=100;
 //每个位保存的数据长度
 
 static int PRECISION=10;
@@ -59,6 +59,9 @@ int setPrecision(char *str);
 int str2int(char *str);
 //把区间[left,right)范围内的字符串转换成正整数
 //忽略其他字符
+
+char* int2str(int x,int y=WIDTH);
+//把整数x转换为字符串，前面补零凑足y位
 
 bool isNum(char x);
 //判断字符是否为数字

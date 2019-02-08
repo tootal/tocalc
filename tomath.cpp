@@ -116,5 +116,28 @@ toNum* abs(toNum *x){
 
 toNum* add(toNum *x,toNum *y){
 	if(x->sign)return sub(y,abs(x));
+	if(y->sign)return sub(x,abs(y));
 	//处理负数情况
+	//以下模拟手工加法计算两个正整数相加
+	toNum *ans=new toNum(false,x->exp);
+	toNode *nowx=x->tail,*nowy=y->tail;
+	short buf=0;
+	//保存进位
+	while(true){
+		short sum=buf;
+		if(nowx)sum+=nowx->data;
+		if(nowy)sum+=nowy->data;
+		//加和
+		toNode *tp=new toNode(sum%10,ans->tail);
+		if(ans->head)ans->tail=ans->tail->next=tp;
+		else ans->head=ans->tail=tp;
+		//插入结果
+		buf=sum/10;
+		//计算进位
+		if(nowx)nowx=nowx->pre;
+		if(nowy)nowy=nowy->pre;
+		//移动指针
+		if(!nowx&&!nowy&&!buf)break;
+	}
+	return ans;
 }

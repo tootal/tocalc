@@ -36,8 +36,8 @@ void toCalcMain(){
 			// printf("b->len=%d\n",b->len);
 			// printf("b->exp=%d\n",b->exp);
 			// printf("b->a[0]=%d\n",b->a[0]);
-			printf("%s\n",toNum2str(a));
-			/*toNum *c;
+			// printf("%s%c%s\n",toNum2str(b),op,toNum2str(a));
+			toNum *c;
 			if(op=='+'){
 				c=add(b,a);
 			}else if(op=='-'){
@@ -54,7 +54,7 @@ void toCalcMain(){
 				char *s=toNum2str(c);
 				printf("%s\n",s);
 				delete[] s;
-			}*/
+			}
 		}else{
 			flag=false;
 		}
@@ -266,4 +266,8 @@ char* toNum2str(toNum *x){
 	if(PRECISION==0)s[ppos]=0;
 	else s[ppos+PRECISION+1]=0;
 	return s;
+}
+
+void shift(toNum *x,toNum *y){
+	
 }

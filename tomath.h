@@ -16,24 +16,37 @@ static const char *ACCEPTCHAR="0123456789+-*/. ";
 static const int MAXLEN=100000;
 //输入输出最大长度
 
-static const int WIDTH=2;
-static const int BASE=100;
+static const int WIDTH=1;
+static const int BASE=10;
 //每个位保存的数据长度
 
 static int PRECISION=10;
 //保留小数位数，默认为10
 
+struct toNode{
+	short data;
+	toList *pre,*next;
+}
+//存储数据的链表结点结构体
+
 struct toNum{
 	bool sign;
-	int *a,len,exp;
+	int len,exp;
+	toList *head,*tail;
 };
 /*
 高精度实数采用转换成整数的方式存储
 包含符号位，指数部分exp，以及整数部分
 sign表示符号位，true为负数，false为正数
-整数部分采用动态数组存储，a为数组首地址
-len表示a数组长度。
+整数部分采用链表存储
+head、tail分别为链表首、尾指针
 */
+
+void push_back(toNum *x,short y);
+//在链表尾插入数据y
+
+void push_front(toNum *x,short y);
+//在链表首插入数据y
 
 void toCalcMain();
 //界面交互部分
@@ -90,5 +103,8 @@ toNum* div(toNum *x,toNum *y);
 
 char* toNum2str(toNum *x);
 //toNum类型转换成字符串
+
+void shift(toNum *x,toNum *y);
+//数位对齐
 
 #endif

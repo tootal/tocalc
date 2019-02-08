@@ -6,7 +6,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.1.1";
+static const char *VERSION="2.1.2";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";

@@ -170,6 +170,7 @@ toNum* sub(toNum *x,toNum *y){
 		int res=buf+nowx->data;
 		buf=0;
 		if(nowy)res-=nowy->data;
+		// printf("sub:res=%d\n",res);
 		//计算减法
 		if(res<0)buf--,res+=10;
 		//计算借位
@@ -181,6 +182,9 @@ toNum* sub(toNum *x,toNum *y){
 		if(!nowx)break;
 	}
 	//未去除前端多余的0
+	// printf("sub:ans->exp=%d\n",ans->exp);
+	// printf("sub:ans->len=%d\n",ans->len);
+	// printf("sub:ans->head->data=%d\n",ans->head->data);
 	return ans;
 }
 
@@ -262,6 +266,7 @@ void push_back(toNum *x,int y){
 }
 
 int pop_front(toNum *x){
+	x->len--;
 	int t=x->head->data;
 	if(x->head==x->tail)x->head=x->tail=NULL;
 	else{

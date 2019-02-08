@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.0";
+static const char *VERSION="2.0.1";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -17,6 +17,10 @@ const int MAXINPUTLEN=100005;
 
 void toCalcMain();
 //计算器主界面
+
+void showInfo();
+//显示初始信息
+
 
 #endif //_TOMATH_H
 

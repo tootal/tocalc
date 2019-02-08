@@ -40,3 +40,12 @@ void toCalcMain(){
 		delete[] input;
 	}
 }
+
+void showInfo(){
+	printf("toCalc %s\n",VERSION);
+	printf("toCalc支持两个高精度实数四则运算，可保留到小数点后任意一位。\n");
+	printf("输入q退出程序，输入小数点加数字可设置保留小数位数（默认10位）\n");
+	printf("例如：输入\".7\"设置为保留到小数点后7位。\n");
+	printf("直接输入算式，按回车键结束输入。");
+	printf("请确保输入合法，程序未做异常处理。\n\n");
+}

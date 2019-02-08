@@ -87,3 +87,13 @@ toNum* s2n(char *s){
 	}
 	return a;
 }
+
+toNode s2l(char *s){
+	toNode *head=new toNode(s[0]-'0'),*pre=head;
+	int len=strlen(s);
+	for(int i=1;i<len;i++){
+		toNode *curr=new toNode(s[i]-'0',pre);
+		pre=pre->next=curr;
+	}
+	return toNode(0,head,pre);
+}

@@ -20,19 +20,22 @@ void toCalcMain(){
 		}else{
 			char *pos=findOp(input);
 			toNum *b=s2n(pos+1);//后操作数
+			// printf("b->sign=%d,b->len=%d,b->exp=%d,b->head->data=%d\n",b->sign,b->len,b->exp,b->head->data);
+			// printf("b=%s\n",n2s(b));
 			char op=*pos;//操作符
 			*pos=0;
 			toNum *a=s2n(input);//前操作数
+			// printf("a=%s,b=%s\n",n2s(a),n2s(b));
 			// shift(a,b);//把a，b的小数点对齐
 			toNum *c;
 			if(op=='+'){
-				c=add(b,a);
+				c=add(a,b);
 			}else if(op=='-'){
-				c=sub(b,a);
+				c=sub(a,b);
 			}else if(op=='*'){
-				c=mul(b,a);
+				c=mul(a,b);
 			}else if(op=='/'){//假定除数不为0，不处理为0情况
-				c=div(b,a);
+				c=div(a,b);
 			}
 			char *s=n2s(c);//c转换为字符串输出
 			printf("%s\n",s);
@@ -88,7 +91,7 @@ toNum* s2n(char *s){
 		x.next->next=y.pre;
 		y.pre->pre=x.next;
 		//合并两部分链表
-		a=new toNum(a->sign,exp,len,x.pre,y.next);
+		a=new toNum(a->sign,-exp,len,x.pre,y.next);
 	}
 	return a;
 }
@@ -107,6 +110,8 @@ void shift(toNum *x,toNum *y){
 	toNum *z=(y->exp>x->exp)?y:x;
 	//z表示阶码较大的数
 	int t=(z->exp-x->exp)+(z->exp-y->exp);
+	// printf("shift:t=%d\n",t);
+	z->exp-=t;
 	//t表示z需要移动的位数
 	while(t--)push_back(z);
 	//在z后补t个0
@@ -132,6 +137,9 @@ toNum* add(toNum *x,toNum *y){
 		if(nowx)sum+=nowx->data;
 		if(nowy)sum+=nowy->data;
 		//计算加法
+		// printf("add:nowx->pre=%d\n",nowx->pre);
+		// printf("add:nowy->pre=%d\n",nowy->pre);
+		// printf("add:sum=%d\n",sum);
 		push_front(ans,sum%10);
 		//插入结果
 		buf=sum/10;
@@ -141,6 +149,9 @@ toNum* add(toNum *x,toNum *y){
 		//移动指针
 		if(!nowx&&!nowy&&!buf)break;
 	}
+	// printf("add:ans->exp=%d\n",ans->exp);
+	// printf("add:ans->len=%d\n",ans->len);
+	// printf("add:ans->head->data=%d\n",ans->head->data);
 	return ans;
 }
 
@@ -286,9 +297,10 @@ int cmp(toNum *x,toNum *y){
 
 char* n2s(toNum *x){
 	while(x->exp>0&&x->exp--)push_back(x);
-	while(-x->exp<PRECISION&&x->exp--)push_back(x);
+	while(-x->exp<PRECISION)push_back(x),x->exp--;
 	while(-x->exp>=x->len)push_front(x);
 	while(x->len+1>-x->exp&&!x->head->data)pop_front(x);
+	// printf("n2s:x->len=%d,x->exp=%d,x->head->data=%d\n",x->len,x->exp,x->head->data);
 	//处理首尾0
 	char *s=new char[x->len+4];
 	int i=0,j=x->len+x->exp;
@@ -306,5 +318,6 @@ char* n2s(toNum *x){
 		s[i++]=n->data+'0';
 		n=n->next;
 	}
+	s[i++]=0;
 	return s;
 }

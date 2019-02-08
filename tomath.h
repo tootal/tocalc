@@ -6,7 +6,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.12";
+static const char *VERSION="2.1.0";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -16,10 +16,10 @@ static const char *SHOWOUTPUT="toCalc<<< ";
 static const char *ACCEPTOPERATOR="+-*/";
 //允许输入的运算符
 
-const int MAXINPUTLEN=100005;
+static const int MAXINPUTLEN=100005;
 //单次输入最大字符数
 
-int PRECISION=10;
+static int PRECISION=10;
 //保留小数点后位数，默认为10
 //保留小数为截断而不是四舍五入
 

@@ -23,6 +23,7 @@ void toCalcMain(){
 			char op=*pos;//操作符
 			*pos=0;
 			toNum *a=s2n(input);//前操作数
+			shift(a,b);//把a，b的小数点对齐
 			toNum *c;
 			if(op=='+'){
 				c=add(b,a);
@@ -96,4 +97,19 @@ toNode s2l(char *s){
 		pre=pre->next=curr;
 	}
 	return toNode(0,head,pre);
+}
+
+void shift(toNum *x,toNum *y){
+	toNum *z=(y->exp>x->exp)?y:x;
+	//z表示阶码较大的数
+	int t=(z->exp-x->exp)+(z->exp-y->exp);
+	//t表示z需要移动的位数
+	while(t--){
+		toNode *tp=new toNode(0,z->tail);
+		z->tail=z->tail->next=tp;
+	}
+}
+
+toNum* add(toNum *x,toNum *y){
+	
 }

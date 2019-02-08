@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.5";
+static const char *VERSION="2.0.6";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -77,6 +77,23 @@ toNode s2l(char *s);
 //把高精度正整数转换为链表
 //返回值为结构体toNode(0,head,tail)
 //head、tail分别表示该链表的首尾节点
+
+void shift(toNum *x,toNum *y);
+//把x，y的小数点对齐
+//具体操作是在阶码较大的数后补0
+
+toNum* add(toNum *x,toNum *y);
+//高精度实数加法
+
+toNum* sub(toNum *x,toNum *y);
+//高精度实数减法
+
+toNum* mul(toNum *x,toNum *y);
+//高精度实数乘法
+
+toNum* div(toNum *x,toNum *y);
+//高精度实数除法
+//假定y不为0
 
 #endif //_TOMATH_H
 

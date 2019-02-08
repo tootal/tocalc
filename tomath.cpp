@@ -62,3 +62,28 @@ char* findOp(char *s){
 	if(*s=='+'||*s=='-')str=str+1;
 	return str+strcspn(str,ACCEPTOPERATOR);
 }
+
+toNum* s2n(char *s){
+	toNum *a=new toNum;
+	if(s[0]=='-')a->sign=true;
+	if(s[0]=='+'||s[0]=='-')s=s+1;
+	//处理数前面的正负号
+	char *pos=strchr(s,'.');
+	//查找小数点的位置
+	if(pos==NULL){//没有小数点
+		toNode x=s2l(s);
+		a=toNum(a->sign,a->exp,x.pre,x.next);
+	}else{
+		int len=strlen(pos+1);
+		//计算exp
+		toNode y=s2l(pos+1);
+		*pos=0;
+		toNode x=s2l(s);
+		//转化为类似于x.y的结构
+		x.next->next=y.pre;
+		y.pre->pre=x.next;
+		//合并两部分链表
+		a=toNum(a->sign,len,x.pre,y.next);
+	}
+	return a;
+}

@@ -25,8 +25,8 @@ struct toNode{
 	short data;//每个节点存储一位数（0~9）便于小数点的处理
 	toNode *pre,*next;
 	toNode(	short x=0,
-			toNode *p=nullptr,
-			toNode *n=nullptr)
+			toNode *p=NULL,
+			toNode *n=NULL)//不用nullptr便于和0转换
 	:data(x),pre(p),next(n){}
 };
 //链表节点结构体
@@ -38,8 +38,8 @@ struct toNum{
 	toNode *head,*tail;//存储高精度数的链表首尾节点
 	toNum(	bool s=false,
 			int e=0,
-			toNode *h=nullptr,
-			toNode *t=nullptr)
+			toNode *h=NULL,
+			toNode *t=NULL)
 	:sign(s),exp(e),head(h),tail(t){}
 };
 //高精度实数结构体
@@ -59,6 +59,24 @@ char* findOp(char *s);
 //参数s为字符串指针，指向一个形如
 //"-13.99/-98.35"的字符串
 //返回值为字符'/'位置的指针
+
+toNum* s2n(char *s);
+//把高精度实数字符串转换为toNum结构体
+//参数s为字符串指针，指向一个形如
+//"-9999.987654"的字符串
+//此字符串将被转换为一个
+//toNum(true,-6,head,tail)的结构体
+//其中head、tail描述的链表有10个节点，结构为：
+// head						  tail
+//	|						   |
+//	V 						   V
+//	9->9->9->9->9->8->7->6->5->4
+
+toNode s2l(char *s);
+//s2n函数的一部分
+//把高精度正整数转换为链表
+//返回值为结构体toNode(0,head,tail)
+//head、tail分别表示该链表的首尾节点
 
 #endif //_TOMATH_H
 

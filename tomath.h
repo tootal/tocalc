@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.8";
+static const char *VERSION="2.0.9";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -20,6 +20,7 @@ const int MAXINPUTLEN=100005;
 
 int PRECISION=10;
 //保留小数点后位数，默认为10
+//保留小数为截断而不是四舍五入
 
 struct toNode{
 	short data;//每个节点存储一位数（0~9）便于小数点的处理
@@ -82,8 +83,8 @@ void shift(toNum *x,toNum *y);
 //把x，y的小数点对齐
 //具体操作是在阶码较大的数后补0
 
-toNum* abs(toNum *x);
-//返回x的绝对值
+toNum* neg(toNum *x);
+//返回x的相反数
 //不会修改x
 
 toNum* add(toNum *x,toNum *y);
@@ -98,6 +99,7 @@ toNum* mul(toNum *x,toNum *y);
 toNum* div(toNum *x,toNum *y);
 //高精度实数除法
 //假定y不为0
+
 
 #endif //_TOMATH_H
 

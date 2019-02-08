@@ -110,15 +110,16 @@ void shift(toNum *x,toNum *y){
 	}
 }
 
-toNum* abs(toNum *x){
-	return toNum(false,x->exp,x->head,x->tail);
+toNum* neg(toNum *x){
+	return toNum(!x->sign,x->exp,x->head,x->tail);
 }
 
 toNum* add(toNum *x,toNum *y){
-	if(x->sign)return sub(y,abs(x));
-	if(y->sign)return sub(x,abs(y));
+	if(x->sign)return sub(y,neg(x));
+	if(y->sign)return sub(x,neg(y));
 	//处理负数情况
-	//以下模拟手工加法计算两个正整数相加
+	//以下模拟手算加法
+	//计算两个正整数相加
 	toNum *ans=new toNum(false,x->exp);
 	toNode *nowx=x->tail,*nowy=y->tail;
 	short buf=0;
@@ -127,9 +128,9 @@ toNum* add(toNum *x,toNum *y){
 		short sum=buf;
 		if(nowx)sum+=nowx->data;
 		if(nowy)sum+=nowy->data;
-		//加和
-		toNode *tp=new toNode(sum%10,ans->tail);
-		if(ans->head)ans->tail=ans->tail->next=tp;
+		//计算加法
+		toNode *tp=new toNode(sum%10,NULL,ans->head);
+		if(ans->head)ans->head=ans->head->pre=tp;
 		else ans->head=ans->tail=tp;
 		//插入结果
 		buf=sum/10;
@@ -140,4 +141,90 @@ toNum* add(toNum *x,toNum *y){
 		if(!nowx&&!nowy&&!buf)break;
 	}
 	return ans;
+}
+
+toNum* sub(toNum *x,toNum *y){
+	if(x->sign)return neg(add(neg(x),y));
+	if(y->sign)return add(x,neg(y));
+	if(cmp(x,y)<0)return neg(sub(y,x));
+	//以下模拟手算减法
+	//计算一个大正整数减一个小正整数
+	toNum *ans=new toNum(false,x->exp);
+	toNode *nowx=x->tail,*nowy=y->tail;
+	short buf=0;
+	//储存借位
+	while(true){
+		short res=buf+nowx->data;
+		buf=0;
+		if(nowy)res-=nowy->data;
+		//计算减法
+		if(res<0)buf--,res+=10;
+		//计算借位
+		toNode *tp=new toNode(res,NULL,ans->head);
+		if(ans->head)ans->head=ans->head->pre=tp;
+		else ans->head=ans->tail=tp;
+		//插入结果
+		nowx=nowx->pre;
+		if(nowy)nowy=nowy->pre;
+		//移动指针
+		if(!nowx)break;
+	}
+	//未去除前端多余的0
+	return ans;
+}
+
+toNum* mul(toNum *x,toNum *y){
+	if(x->sign)return neg(mul(neg(x),y));
+	if(y->sign)return neg(mul(x,neg(y)));
+	//以下模拟手算乘法
+	//计算两个正整数相乘
+	toNum *ans=new toNum(false,x->exp+y->exp);
+	toNum *nowy=y->head;
+	toNum *nowans=ans->head;//标记答案偏移
+	while(true){
+		short buf=0;
+		toNode *nowx=x->head,*pos=nowans;
+		while(true){
+			short sum=buf;
+			if(nowx&&nowy)sum+=(nowx->data)*(nowy->data);
+			//计算乘法
+			if(!pos){
+				toNode *tp=new toNode(sum%10,NULL,ans->head);
+				if(ans->head)ans->head=ans->head->pre=tp;
+				else ans->head=ans->tail=tp;
+			}else{
+				buf=(pos->data+sum)/10;
+				pos->data=(pos->data+sum)%10;
+			}
+			//插入结果
+			if(nowx)nowx=nowx->pre;
+			pos=pos->pre;
+			if(!nowx&&!buf)break;
+		}
+		nowy=nowy->pre;
+		if(!nowans)nowans=ans->tail;
+		nowans=nowans->pre;
+		if(!nowy)break;
+	}
+	return ans;
+}
+
+toNum* div(toNum *x,toNum *y){
+	if(x.sign)return neg(div(neg(x),y));
+	if(y.sign)return neg(div(x,neg(y)));
+	for(int i=0;i<PRECISION;i++){
+		toNode *tp=new toNode(0,x->tail);
+		x->tail=x->tail->next=tp;
+	}
+	//以下模拟手算除法
+	//计算两个正整数相除(算出商和余数)
+	//试商部分采用二分法
+	toNum *q=new toNum;
+	toNum *r=new toNum;
+	//分别表示商quotient、余数remainder
+	toNode *nowx=x->head;
+	while(nowx){
+		
+		nowx=nowx->next;
+	}
 }

@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.10";
+static const char *VERSION="2.1.0";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -106,6 +106,8 @@ void push_front(toNum *x,short y=0);
 void push_back(toNum *x,short y=0);
 //在链表尾插入数据y，默认为0
 
+toNum* i2n(short x=0);
+//把小于10的正整数x转化为toNum类型
 
 #endif //_TOMATH_H
 

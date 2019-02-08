@@ -208,14 +208,24 @@ toNum* div(toNum *x,toNum *y){
 	//以下模拟手算除法
 	//计算两个正整数相除(算出商和余数)
 	//试商部分采用二分法
-	toNum *q=new toNum;
-	toNum *r=new toNum;
+	toNum *q=new toNum(false,-PRECISION);
+	toNum *r=new toNum(false,-PRECISION);
 	//分别表示商quotient、余数remainder
 	toNode *nowx=x->head;
 	while(nowx){
-
+		short lt=0,rt=9,m;
+		while(lt<rt){
+			m=(lt+rt+1)>>1;
+			if(cmp(mul(y,i2n(m)),r)<=0)lt=m;
+			else rt=m-1;
+		}
+		//二分试商，商为
+		push_back(q,lt);
+		r=sub(r,mul(y,i2n(lt)));
 		nowx=nowx->next;
 	}
+	return q;
+	//此处返回r即为浮点余数
 }
 
 void push_front(toNum *x,short y){
@@ -228,4 +238,9 @@ void push_back(toNum *x,short y){
 	toNode *tp=new toNode(y,x->tail);
 	if(x->tail)x->tail=x->tail->next=tp;
 	else x->tail=x->head=tp;
+}
+
+toNum* i2n(short x){
+	toNode *tp=new toNode(lt);
+	return toNum(false,0,tp,tp);
 }

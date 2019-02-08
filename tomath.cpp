@@ -49,3 +49,11 @@ void showInfo(){
 	printf("直接输入算式，按回车键结束输入。");
 	printf("请确保输入合法，程序未做异常处理。\n\n");
 }
+
+int s2i(char *s){
+	int ans=0,len=strlen(s);
+	for(int i=0;i<len;i++){
+		ans=ans*10+s[i]-'0';
+	}
+	return ans;
+}

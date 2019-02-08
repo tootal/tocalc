@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.1";
+static const char *VERSION="2.0.2";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -20,6 +20,10 @@ void toCalcMain();
 
 void showInfo();
 //显示初始信息
+
+int s2i(char *s);
+//字符串转换为整数(String to Integer)
+
 
 
 #endif //_TOMATH_H

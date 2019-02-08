@@ -18,7 +18,7 @@ int main(){
 
 	// printf("hello world!\n");
 	// printf("你好你好！\n");getchar();
-	toCalcMain();
+	toCalcMain();//运行高精度计算器主程序
 
 	
 	return 0;

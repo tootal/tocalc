@@ -16,7 +16,7 @@ void toCalcMain(){
 			printf("Bye!\n");
 			break;
 		}else if(input[0]=='.'){//设置保留小数位数
-			printf("已设置结果保留%d位小数！\n",setPrecision(s2i(input+1)));
+			printf("已设置结果保留%d位小数！\n",PRECISION=s2i(input+1));
 		}else{
 			char *pos=findOp(input);
 			toNum *b=s2n(pos+1);//后操作数
@@ -46,7 +46,7 @@ void showInfo(){
 	printf("toCalc支持两个高精度实数四则运算，可保留到小数点后任意一位。\n");
 	printf("输入q退出程序，输入小数点加数字可设置保留小数位数（默认10位）\n");
 	printf("例如：输入\".7\"设置为保留到小数点后7位。\n");
-	printf("直接输入算式，按回车键结束输入。");
+	printf("直接输入算式，例如\"99.899/-99666.99666\"，按回车键结束输入。");
 	printf("请确保输入合法，程序未做异常处理。\n\n");
 }
 
@@ -56,4 +56,9 @@ int s2i(char *s){
 		ans=ans*10+s[i]-'0';
 	}
 	return ans;
+}
+
+char* findOp(char *s){
+	if(*s=='+'||*s=='-')str=str+1;
+	return str+strcspn(str,ACCEPTOPERATOR);
 }

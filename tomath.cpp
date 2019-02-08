@@ -110,6 +110,11 @@ void shift(toNum *x,toNum *y){
 	}
 }
 
+toNum* abs(toNum *x){
+	return toNum(false,x->exp,x->head,x->tail);
+}
+
 toNum* add(toNum *x,toNum *y){
-	
+	if(x->sign)return sub(y,abs(x));
+	//处理负数情况
 }

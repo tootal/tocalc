@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.6";
+static const char *VERSION="2.0.7";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -81,6 +81,10 @@ toNode s2l(char *s);
 void shift(toNum *x,toNum *y);
 //把x，y的小数点对齐
 //具体操作是在阶码较大的数后补0
+
+toNum* abs(toNum *x);
+//返回x的绝对值
+//不会修改x
 
 toNum* add(toNum *x,toNum *y);
 //高精度实数加法

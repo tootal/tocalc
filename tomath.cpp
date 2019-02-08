@@ -23,7 +23,7 @@ void toCalcMain(){
 			char op=*pos;//操作符
 			*pos=0;
 			toNum *a=s2n(input);//前操作数
-			shift(a,b);//把a，b的小数点对齐
+			// shift(a,b);//把a，b的小数点对齐
 			toNum *c;
 			if(op=='+'){
 				c=add(b,a);
@@ -72,11 +72,15 @@ toNum* s2n(char *s){
 	char *pos=strchr(s,'.');
 	//查找小数点的位置
 	if(pos==NULL){//没有小数点
+		len=strlen(s);
+		//计算len
 		toNode x=s2l(s);
-		a=toNum(a->sign,a->exp,x.pre,x.next);
+		a=toNum(a->sign,0,len,x.pre,x.next);
 	}else{
-		int len=strlen(pos+1);
+		int exp=strlen(pos+1);
 		//计算exp
+		int len=strlen(s)-1;
+		//计算len
 		toNode y=s2l(pos+1);
 		*pos=0;
 		toNode x=s2l(s);
@@ -84,7 +88,7 @@ toNum* s2n(char *s){
 		x.next->next=y.pre;
 		y.pre->pre=x.next;
 		//合并两部分链表
-		a=toNum(a->sign,len,x.pre,y.next);
+		a=toNum(a->sign,exp,len,x.pre,y.next);
 	}
 	return a;
 }
@@ -109,10 +113,11 @@ void shift(toNum *x,toNum *y){
 }
 
 toNum* neg(toNum *x){
-	return toNum(!x->sign,x->exp,x->head,x->tail);
+	return toNum(!x->sign,x->exp,x->len,x->head,x->tail);
 }
 
 toNum* add(toNum *x,toNum *y){
+	shift(x,y);
 	if(x->sign)return sub(y,neg(x));
 	if(y->sign)return sub(x,neg(y));
 	//处理负数情况
@@ -120,10 +125,10 @@ toNum* add(toNum *x,toNum *y){
 	//计算两个正整数相加
 	toNum *ans=new toNum(false,x->exp);
 	toNode *nowx=x->tail,*nowy=y->tail;
-	short buf=0;
+	int buf=0;
 	//保存进位
 	while(true){
-		short sum=buf;
+		int sum=buf;
 		if(nowx)sum+=nowx->data;
 		if(nowy)sum+=nowy->data;
 		//计算加法
@@ -140,6 +145,7 @@ toNum* add(toNum *x,toNum *y){
 }
 
 toNum* sub(toNum *x,toNum *y){
+	shift(x,y);
 	if(x->sign)return neg(add(neg(x),y));
 	if(y->sign)return add(x,neg(y));
 	if(cmp(x,y)<0)return neg(sub(y,x));
@@ -147,10 +153,10 @@ toNum* sub(toNum *x,toNum *y){
 	//计算一个大正整数减一个小正整数
 	toNum *ans=new toNum(false,x->exp);
 	toNode *nowx=x->tail,*nowy=y->tail;
-	short buf=0;
+	int buf=0;
 	//储存借位
 	while(true){
-		short res=buf+nowx->data;
+		int res=buf+nowx->data;
 		buf=0;
 		if(nowy)res-=nowy->data;
 		//计算减法
@@ -168,6 +174,7 @@ toNum* sub(toNum *x,toNum *y){
 }
 
 toNum* mul(toNum *x,toNum *y){
+	shift(x,y);
 	if(x->sign)return neg(mul(neg(x),y));
 	if(y->sign)return neg(mul(x,neg(y)));
 	//以下模拟手算乘法
@@ -176,10 +183,10 @@ toNum* mul(toNum *x,toNum *y){
 	toNum *nowy=y->head;
 	toNum *nowans=ans->head;//标记答案偏移
 	while(true){
-		short buf=0;
+		int buf=0;
 		toNode *nowx=x->head,*pos=nowans;
 		while(true){
-			short sum=buf;
+			int sum=buf;
 			if(nowx&&nowy)sum+=(nowx->data)*(nowy->data);
 			//计算乘法
 			if(!pos)push_front(ans,sum%10);
@@ -201,6 +208,7 @@ toNum* mul(toNum *x,toNum *y){
 }
 
 toNum* div(toNum *x,toNum *y){
+	shift(x,y);
 	if(x.sign)return neg(div(neg(x),y));
 	if(y.sign)return neg(div(x,neg(y)));
 	for(int i=0;i<PRECISION;i++)push_back(x);
@@ -213,7 +221,7 @@ toNum* div(toNum *x,toNum *y){
 	//分别表示商quotient、余数remainder
 	toNode *nowx=x->head;
 	while(nowx){
-		short lt=0,rt=9,m;
+		int lt=0,rt=9,m;
 		while(lt<rt){
 			m=(lt+rt+1)>>1;
 			if(cmp(mul(y,i2n(m)),r)<=0)lt=m;
@@ -228,19 +236,40 @@ toNum* div(toNum *x,toNum *y){
 	//此处返回r即为浮点余数
 }
 
-void push_front(toNum *x,short y){
+void push_front(toNum *x,int y){
+	x->len++;
 	toNode *tp=new toNode(y,NULL,x->head);
 	if(x->head)x->head=x->head->pre=tp;
 	else x->head=x->tail=tp;
 }
 
-void push_back(toNum *x,short y){
+void push_back(toNum *x,int y){
+	x->len++;
 	toNode *tp=new toNode(y,x->tail);
 	if(x->tail)x->tail=x->tail->next=tp;
 	else x->tail=x->head=tp;
 }
 
-toNum* i2n(short x){
+toNum* i2n(int x){
 	toNode *tp=new toNode(lt);
-	return toNum(false,0,tp,tp);
+	return toNum(false,0,1,tp,tp);
+}
+
+int cmp(toNum *x,toNum *y){
+	shift(x,y);
+	if(x->sign&&!y->sign)return -1;
+	if(!x->sign&&y->sign)return 1;
+	if(x->len!=y->len)return 
+		(x->sign^(x->len>y->len))?1:-1;
+	//此时xy同号,利用位运算简化判断
+	else{
+		toNode *nowx=x->head,*nowy=y->head;
+		while(nowx&&nowy){
+			if(nowx->data!=nowy->data)return
+				(x->sign^(nowx->data>nowy->data))?1:-1;
+			nowx=nowx->next;
+			nowy=nowy->next;
+		}
+		return 0;//x==y
+	}
 }

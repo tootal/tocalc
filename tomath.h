@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.10";
+static const char *VERSION="2.1.0";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -23,9 +23,9 @@ int PRECISION=10;
 //保留小数为截断而不是四舍五入
 
 struct toNode{
-	short data;//每个节点存储一位数（0~9）便于小数点的处理
+	int data;//每个节点存储一位数（0~9）便于小数点的处理
 	toNode *pre,*next;
-	toNode(	short x=0,
+	toNode(	int x=0,
 			toNode *p=NULL,
 			toNode *n=NULL)//不用nullptr便于和0转换
 	:data(x),pre(p),next(n){}
@@ -35,13 +35,15 @@ struct toNode{
 
 struct toNum{
 	bool sign;//true表示负数，false表示正数
-	int exp;//表示阶码，数值为小数点后数字个数的相反数
+	int exp;//exp表示阶码，数值为小数点后数字个数的相反数
+	int len;//len表示数据长度，主要用来比较大小
 	toNode *head,*tail;//存储高精度数的链表首尾节点
 	toNum(	bool s=false,
 			int e=0,
+			int l=0,
 			toNode *h=NULL,
 			toNode *t=NULL)
-	:sign(s),exp(e),head(h),tail(t){}
+	:sign(s),exp(e),len(l),head(h),tail(t){}
 };
 //高精度实数结构体
 //包含简单的构造函数
@@ -66,7 +68,7 @@ toNum* s2n(char *s);
 //参数s为字符串指针，指向一个形如
 //"-9999.987654"的字符串
 //此字符串将被转换为一个
-//toNum(true,-6,head,tail)的结构体
+//toNum(true,-6,10,head,tail)的结构体
 //其中head、tail描述的链表有10个节点，结构为：
 // head						  tail
 //	|						   |
@@ -100,14 +102,21 @@ toNum* div(toNum *x,toNum *y);
 //高精度实数除法
 //假定y不为0
 
-void push_front(toNum *x,short y=0);
+void push_front(toNum *x,int y=0);
 //在链表头插入数据y，默认为0
 
-void push_back(toNum *x,short y=0);
+void push_back(toNum *x,int y=0);
 //在链表尾插入数据y，默认为0
 
-toNum* i2n(short x=0);
+toNum* i2n(int x=0);
 //把小于10的正整数x转化为toNum类型
+
+int cmp(toNum *x,toNum *y);
+//比较x,y的大小
+//若x>y,cmp(x,y)>0
+//若x=y,cmp(x,y)=0
+//若x<y,cmp(x,y)<0
+
 
 #endif //_TOMATH_H
 

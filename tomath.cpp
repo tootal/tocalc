@@ -250,6 +250,16 @@ void push_back(toNum *x,int y){
 	else x->tail=x->head=tp;
 }
 
+int pop_front(toNum *x){
+	int t=x->head->data;
+	if(x->head==x->tail)x->head=x->tail=NULL;
+	else{
+		x->head=x->head->next;
+		x->head->pre=NULL;
+	}
+	return t;
+}
+
 toNum* i2n(int x){
 	toNode *tp=new toNode(x);
 	return new toNum(false,0,1,tp,tp);
@@ -272,4 +282,29 @@ int cmp(toNum *x,toNum *y){
 		}
 		return 0;//x==y
 	}
+}
+
+char* n2s(toNum *x){
+	while(x->exp>0&&x->exp--)push_back(x);
+	while(-x->exp<PRECISION&&x->exp--)push_back(x);
+	while(-x->exp>=x->len)push_front(x);
+	while(x->len+1>-x->exp&&!x->head->data)pop_front(x);
+	//处理首尾0
+	char *s=new char[x->len+4];
+	int i=0,j=x->len+x->exp;
+	toNode *n=x->head;
+	//i指向s当前处理位置
+	//j表示小数点前的数字个数
+	//n指向链表当前处理位置
+	if(x->sign)s[i++]='-';
+	while(j--){
+		s[i++]=n->data+'0';
+		n=n->next;
+	}
+	if(x->exp<0)s[i++]='.';
+	while(n){
+		s[i++]=n->data+'0';
+		n=n->next;
+	}
+	return s;
 }

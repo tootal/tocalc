@@ -60,8 +60,8 @@ int s2i(char *s){
 }
 
 char* findOp(char *s){
-	if(*s=='+'||*s=='-')str=str+1;
-	return str+strcspn(str,ACCEPTOPERATOR);
+	if(*s=='+'||*s=='-')s=s+1;
+	return s+strcspn(s,ACCEPTOPERATOR);
 }
 
 toNum* s2n(char *s){
@@ -72,7 +72,7 @@ toNum* s2n(char *s){
 	char *pos=strchr(s,'.');
 	//查找小数点的位置
 	if(pos==NULL){//没有小数点
-		len=strlen(s);
+		int len=strlen(s);
 		//计算len
 		toNode x=s2l(s);
 		a=toNum(a->sign,0,len,x.pre,x.next);
@@ -88,7 +88,7 @@ toNum* s2n(char *s){
 		x.next->next=y.pre;
 		y.pre->pre=x.next;
 		//合并两部分链表
-		a=toNum(a->sign,exp,len,x.pre,y.next);
+		a=new toNum(a->sign,exp,len,x.pre,y.next);
 	}
 	return a;
 }
@@ -113,7 +113,7 @@ void shift(toNum *x,toNum *y){
 }
 
 toNum* neg(toNum *x){
-	return toNum(!x->sign,x->exp,x->len,x->head,x->tail);
+	return new toNum(!x->sign,x->exp,x->len,x->head,x->tail);
 }
 
 toNum* add(toNum *x,toNum *y){
@@ -180,8 +180,8 @@ toNum* mul(toNum *x,toNum *y){
 	//以下模拟手算乘法
 	//计算两个正整数相乘
 	toNum *ans=new toNum(false,x->exp+y->exp);
-	toNum *nowy=y->head;
-	toNum *nowans=ans->head;//标记答案偏移
+	toNode *nowy=y->head;
+	toNode *nowans=ans->head;//标记答案偏移
 	while(true){
 		int buf=0;
 		toNode *nowx=x->head,*pos=nowans;
@@ -209,8 +209,8 @@ toNum* mul(toNum *x,toNum *y){
 
 toNum* div(toNum *x,toNum *y){
 	shift(x,y);
-	if(x.sign)return neg(div(neg(x),y));
-	if(y.sign)return neg(div(x,neg(y)));
+	if(x->sign)return neg(div(neg(x),y));
+	if(y->sign)return neg(div(x,neg(y)));
 	for(int i=0;i<PRECISION;i++)push_back(x);
 	//在x后加PRECISION个0
 	//以下模拟手算除法
@@ -251,8 +251,8 @@ void push_back(toNum *x,int y){
 }
 
 toNum* i2n(int x){
-	toNode *tp=new toNode(lt);
-	return toNum(false,0,1,tp,tp);
+	toNode *tp=new toNode(x);
+	return new toNum(false,0,1,tp,tp);
 }
 
 int cmp(toNum *x,toNum *y){

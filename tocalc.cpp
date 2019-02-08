@@ -4,7 +4,7 @@ Create by tootal at 2019.2.2
 Compiler version: MinGW-W64 gcc 8.1.0
 Compile command: 
 
-g++ -static -o tocalc tocalc.cpp tomath.cpp & tocalc
+g++ -o tocalc tocalc.cpp tomath.cpp & tocalc
 
 */
 

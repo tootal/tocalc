@@ -104,10 +104,8 @@ void shift(toNum *x,toNum *y){
 	//z表示阶码较大的数
 	int t=(z->exp-x->exp)+(z->exp-y->exp);
 	//t表示z需要移动的位数
-	while(t--){
-		toNode *tp=new toNode(0,z->tail);
-		z->tail=z->tail->next=tp;
-	}
+	while(t--)push_back(z);
+	//在z后补t个0
 }
 
 toNum* neg(toNum *x){
@@ -129,9 +127,7 @@ toNum* add(toNum *x,toNum *y){
 		if(nowx)sum+=nowx->data;
 		if(nowy)sum+=nowy->data;
 		//计算加法
-		toNode *tp=new toNode(sum%10,NULL,ans->head);
-		if(ans->head)ans->head=ans->head->pre=tp;
-		else ans->head=ans->tail=tp;
+		push_front(ans,sum%10);
 		//插入结果
 		buf=sum/10;
 		//计算进位
@@ -160,9 +156,7 @@ toNum* sub(toNum *x,toNum *y){
 		//计算减法
 		if(res<0)buf--,res+=10;
 		//计算借位
-		toNode *tp=new toNode(res,NULL,ans->head);
-		if(ans->head)ans->head=ans->head->pre=tp;
-		else ans->head=ans->tail=tp;
+		push_front(ans,res);
 		//插入结果
 		nowx=nowx->pre;
 		if(nowy)nowy=nowy->pre;
@@ -188,11 +182,8 @@ toNum* mul(toNum *x,toNum *y){
 			short sum=buf;
 			if(nowx&&nowy)sum+=(nowx->data)*(nowy->data);
 			//计算乘法
-			if(!pos){
-				toNode *tp=new toNode(sum%10,NULL,ans->head);
-				if(ans->head)ans->head=ans->head->pre=tp;
-				else ans->head=ans->tail=tp;
-			}else{
+			if(!pos)push_front(ans,sum%10);
+			else{
 				buf=(pos->data+sum)/10;
 				pos->data=(pos->data+sum)%10;
 			}
@@ -212,10 +203,8 @@ toNum* mul(toNum *x,toNum *y){
 toNum* div(toNum *x,toNum *y){
 	if(x.sign)return neg(div(neg(x),y));
 	if(y.sign)return neg(div(x,neg(y)));
-	for(int i=0;i<PRECISION;i++){
-		toNode *tp=new toNode(0,x->tail);
-		x->tail=x->tail->next=tp;
-	}
+	for(int i=0;i<PRECISION;i++)push_back(x);
+	//在x后加PRECISION个0
 	//以下模拟手算除法
 	//计算两个正整数相除(算出商和余数)
 	//试商部分采用二分法
@@ -224,7 +213,19 @@ toNum* div(toNum *x,toNum *y){
 	//分别表示商quotient、余数remainder
 	toNode *nowx=x->head;
 	while(nowx){
-		
+
 		nowx=nowx->next;
 	}
+}
+
+void push_front(toNum *x,short y){
+	toNode *tp=new toNode(y,NULL,x->head);
+	if(x->head)x->head=x->head->pre=tp;
+	else x->head=x->tail=tp;
+}
+
+void push_back(toNum *x,short y){
+	toNode *tp=new toNode(y,x->tail);
+	if(x->tail)x->tail=x->tail->next=tp;
+	else x->tail=x->head=tp;
 }

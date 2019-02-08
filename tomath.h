@@ -5,7 +5,7 @@
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.0.9";
+static const char *VERSION="2.0.10";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -99,6 +99,12 @@ toNum* mul(toNum *x,toNum *y);
 toNum* div(toNum *x,toNum *y);
 //高精度实数除法
 //假定y不为0
+
+void push_front(toNum *x,short y=0);
+//在链表头插入数据y，默认为0
+
+void push_back(toNum *x,short y=0);
+//在链表尾插入数据y，默认为0
 
 
 #endif //_TOMATH_H

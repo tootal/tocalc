@@ -1,12 +1,12 @@
 //此文件包含tomath库函数的声明
 //于20190208重写
-//没有异常处理、没有释放内存
+//没有异常处理
 
 #ifndef _TOMATH_H
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.1.3";
+static const char *VERSION="2.1.4";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -113,7 +113,7 @@ int pop_front(toNum *x);
 //在链表头删除元素，返回被删除的值
 
 toNum* i2n(int x=0);
-//把小于10的正整数x转化为toNum类型
+//把整数x转化为toNum类型
 
 int cmp(toNum *x,toNum *y);
 //比较x,y的大小
@@ -123,6 +123,14 @@ int cmp(toNum *x,toNum *y);
 
 char* n2s(toNum *x);
 //toNum类型转换成字符串
+//注意n2s会改变x
+/*
+toNum* d0(toNum *x);
+//处理首尾0
+*/
+char* l2s(toNode *x);
+//调试使用
+//把链表转化为字符串
 
 #endif //_TOMATH_H
 

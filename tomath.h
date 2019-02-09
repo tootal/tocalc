@@ -1,12 +1,18 @@
 //此文件包含tomath库函数的声明
 //于20190208重写
-//没有异常处理
-
+//总结以下：
+/*
+没有写析构函数，因此有很多内存都没有释放。
+除法的余数没有写好，懒得再调试了。（毕竟浮点余数也不常用）
+对输入异常的情况没有处理。
+还有很多地方指针复制比较混乱，反正现在能运行就OK了。。。
+或许留到面向对象实现来写？
+*/
 #ifndef _TOMATH_H
 #define _TOMATH_H
 //避免头文件重复包含
 
-static const char *VERSION="2.2.1";
+static const char *VERSION="2.2.2";
 //版本号
 
 static const char *SHOWINPUT="toCalc>>> ";
@@ -127,8 +133,8 @@ char* n2s(toNum *x);
 /*
 toNum* d0(toNum *x);
 //处理首尾0
-*/
-char* l2s(toNode *x);
+*//*
+char* l2s(toNode *x);*/
 //调试使用
 //把链表转化为字符串
 

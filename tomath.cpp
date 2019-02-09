@@ -380,7 +380,7 @@ toNum* d0(toNum *x){
 	while(x->len>1-x->exp&&!x->head->data)pop_front(x);
 	return x;
 }*/
-
+/*
 char* l2s(toNode *x){
 	char *s=new char[105];
 	int i=0;
@@ -390,4 +390,4 @@ char* l2s(toNode *x){
 	}
 	s[i++]=0;
 	return s;
-}
+}*/

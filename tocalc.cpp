@@ -4,7 +4,10 @@ Create by tootal at 2019.2.2
 Compiler version: MinGW-W64 gcc 8.1.0
 Compile command: 
 
-g++ -fexec-charset=GBK -m32 -o tocalc tocalc.cpp tomath.cpp
+64位程序：
+g++ -fexec-charset=GBK -static -o tocalc tocalc.cpp tomath.cpp
+32位程序：
+g++ -fexec-charset=GBK -static -m32 -o tocalc tocalc.cpp tomath.cpp
 
 */
 

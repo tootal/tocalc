@@ -115,6 +115,7 @@ void shift(toNum *x,toNum *y){
 	//t表示z需要移动的位数
 	while(t--)push_back(z);
 	//在z后补t个0
+	// printf("shift:z->tail->data=%d\n",z->tail->data);
 }
 
 toNum* neg(toNum *x){
@@ -190,22 +191,34 @@ toNum* sub(toNum *x,toNum *y){
 
 toNum* mul(toNum *x,toNum *y){
 	shift(x,y);
+	// printf("mul:y->tail->data=%d\n",y->tail->data);
 	if(x->sign)return neg(mul(neg(x),y));
 	if(y->sign)return neg(mul(x,neg(y)));
 	//以下模拟手算乘法
 	//计算两个正整数相乘
 	toNum *ans=new toNum(false,x->exp+y->exp);
-	toNode *nowy=y->head;
-	toNode *nowans=ans->head;//标记答案偏移
+	// printf("mul:ans->exp=%d\n",ans->exp);
+	toNode *nowy=y->tail;
+	toNode *nowans=ans->tail;//标记答案偏移
 	while(true){
 		int buf=0;
-		toNode *nowx=x->head,*pos=nowans;
+		toNode *nowx=x->tail,*pos=nowans;
 		while(true){
 			int sum=buf;
 			if(nowx&&nowy)sum+=(nowx->data)*(nowy->data);
+			// printf("mul:nowx->data=%d\n",nowx->data);
+			// printf("mul:nowy->data=%d\n",nowy->data);
+			// printf("mul:sum=%d\n",sum);
 			//计算乘法
-			if(!pos)push_front(ans,sum%10);
+			if(!pos){
+				// printf("mul:pf(%d)\n",sum%10);
+				push_front(ans,sum%10);
+				buf=sum/10;
+				pos=ans->head;//原地更新pos
+				if(!nowans)nowans=pos;//首次更新nowans
+			}
 			else{
+				// printf("mul:pos=%d,+(%d)\n",pos->data,sum%10);
 				buf=(pos->data+sum)/10;
 				pos->data=(pos->data+sum)%10;
 			}
@@ -215,8 +228,9 @@ toNum* mul(toNum *x,toNum *y){
 			if(!nowx&&!buf)break;
 		}
 		nowy=nowy->pre;
-		if(!nowans)nowans=ans->tail;
+		// if(!nowans)nowans=ans->tail;//若是第一次插入,tail改变了,要更新nowans
 		nowans=nowans->pre;
+		// if(nowans)printf("mul:nowans->data=%d\n",nowans->data);
 		if(!nowy)break;
 	}
 	return ans;
@@ -263,6 +277,7 @@ void push_back(toNum *x,int y){
 	toNode *tp=new toNode(y,x->tail);
 	if(x->tail)x->tail=x->tail->next=tp;
 	else x->tail=x->head=tp;
+	// printf("pb:x->tail->data=%d\n",x->tail->data);
 }
 
 int pop_front(toNum *x){
@@ -301,10 +316,9 @@ int cmp(toNum *x,toNum *y){
 }
 
 char* n2s(toNum *x){
-	while(x->exp>0&&x->exp--)push_back(x);
-	while(-x->exp<PRECISION)push_back(x),x->exp--;
+	while(x->exp>-PRECISION)push_back(x),x->exp--;
 	while(-x->exp>=x->len)push_front(x);
-	while(x->len+1>-x->exp&&!x->head->data)pop_front(x);
+	while(x->len>1-x->exp&&!x->head->data)pop_front(x);
 	// printf("n2s:x->len=%d,x->exp=%d,x->head->data=%d\n",x->len,x->exp,x->head->data);
 	//处理首尾0
 	char *s=new char[x->len+4];

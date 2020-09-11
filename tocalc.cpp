@@ -1,13 +1,9 @@
 /*
 
 Create by tootal at 2019.2.2
-Compiler version: MinGW-W64 gcc 8.1.0
-Compile command: 
-
-64位程序：
-g++ -fexec-charset=GBK -static -o tocalc tocalc.cpp tomath.cpp
-32位程序：
-g++ -fexec-charset=GBK -static -m32 -o tocalc tocalc.cpp tomath.cpp
+编译命令: 
+Mingw64：
+g++ -fexec-charset=GBK -static -O2 -o tocalc tocalc.cpp tomath.cpp
 
 */
 
@@ -20,7 +16,6 @@ int main(){
 	// printf("hello world!\n");
 	// printf("你好你好！\n");getchar();
 	toCalcMain();//运行高精度计算器主程序
-
 	
 	return 0;
 }
